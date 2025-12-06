@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "371905657646",
+    "project_id": "chickenspot-f225a",
+    "storage_bucket": "chickenspot-f225a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371905657646:android:ade9e214771836033fd8bf",
+        "android_client_info": {
+          "package_name": "org.dika.chicken"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYcXzL2s6zKwh5Qz5Uevxevb_OyXO1itQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371905657646:android:76399b4f04d1b4ce3fd8bf",
+        "android_client_info": {
+          "package_name": "org.dika.geoplug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYcXzL2s6zKwh5Qz5Uevxevb_OyXO1itQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371905657646:android:ebe932eaa5a49f9a3fd8bf",
+        "android_client_info": {
+          "package_name": "org.society.appname"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYcXzL2s6zKwh5Qz5Uevxevb_OyXO1itQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
