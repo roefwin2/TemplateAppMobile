@@ -80,7 +80,18 @@ class MainViewModel(
         }
     }
 
-    override fun onCleared() {
+    
+
+    /**
+     * Sauvegarder le token FCM
+     */
+    fun saveToken(newToken: String) {
+        viewModelScope.launch {
+            val result = authRepository.saveFcmToken(newToken)
+            println("✅ Token FCM reçu: $result")
+        }
+    }
+override fun onCleared() {
         super.onCleared()
         authObserverJob?.cancel()
     }

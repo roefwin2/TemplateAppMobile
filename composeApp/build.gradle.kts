@@ -24,17 +24,28 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            export(libs.kmpnotifier)
         }
     }
     
     sourceSets {
         androidMain.dependencies {
+
+            // Firebase pour les notifications push
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.7.0"))
+            implementation("com.google.firebase:firebase-messaging-ktx")
+            implementation("com.google.firebase:firebase-analytics-ktx")
+
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.coroutines.android)
         }
         
         commonMain.dependencies {
+
+            // KMP Notifier
+            api(libs.kmpnotifier)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.materialIconsExtended)

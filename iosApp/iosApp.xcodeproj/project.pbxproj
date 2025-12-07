@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F83281932EE5C12200927533 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = F83281922EE5C12200927533 /* FirebaseMessaging */; };
 		F855C09C2EE46EC4000E9F37 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F855C09B2EE46EC4000E9F37 /* FirebaseAuth */; };
 		F855C09E2EE46EC4000E9F37 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = F855C09D2EE46EC4000E9F37 /* FirebaseCore */; };
 		F855C0A02EE4708A000E9F37 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F855C09F2EE4708A000E9F37 /* FirebaseFirestore */; };
@@ -47,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F83281932EE5C12200927533 /* FirebaseMessaging in Frameworks */,
 				F855C09E2EE46EC4000E9F37 /* FirebaseCore in Frameworks */,
 				F855C09C2EE46EC4000E9F37 /* FirebaseAuth in Frameworks */,
 				F855C0A02EE4708A000E9F37 /* FirebaseFirestore in Frameworks */,
@@ -97,6 +99,7 @@
 				F855C09B2EE46EC4000E9F37 /* FirebaseAuth */,
 				F855C09D2EE46EC4000E9F37 /* FirebaseCore */,
 				F855C09F2EE4708A000E9F37 /* FirebaseFirestore */,
+				F83281922EE5C12200927533 /* FirebaseMessaging */,
 			);
 			productName = iosApp;
 			productReference = 77A664CB79BD63347D793255 /* AppName.app */;
@@ -253,6 +256,7 @@
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
@@ -340,6 +344,7 @@
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
@@ -398,6 +403,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F83281922EE5C12200927533 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F855C09A2EE46EC4000E9F37 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		F855C09B2EE46EC4000E9F37 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F855C09A2EE46EC4000E9F37 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
