@@ -12,6 +12,7 @@ import org.society.appname.module.authentication.presentation.MainViewModel
 import org.society.appname.module.authentication.presentation.SessionState
 import org.society.appname.module.authentication.presentation.navigation.BottomNavItem
 import org.koin.compose.viewmodel.koinViewModel
+import org.society.appname.geolocation.presentation.MapScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +94,7 @@ fun MainScreen(
                         .padding(paddingValues)
                 ) {
                     when (selectedTab) {
-                        0 -> HomeScreen(user = state.user)
+                        0 -> MapScreen()
                         1 -> ProfileScreen(user = state.user)
                         2 -> SettingsScreen(user = state.user)
                     }

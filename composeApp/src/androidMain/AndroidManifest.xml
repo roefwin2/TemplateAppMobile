@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Permissions de localisation -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 
@@ -32,6 +38,12 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="default_channel" />
 
+        
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDEh8JhHWuNCGytKmkskUN_3foFBZGDzTo" />
+        
         </application>
 
 </manifest>
