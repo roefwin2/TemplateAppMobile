@@ -5,6 +5,7 @@ import org.society.appname.module.authentication.di.initKoin
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import org.society.appname.R
+import org.koin.android.ext.koin.androidContext
 
 
 class AppNameApplication : Application() {
@@ -22,6 +23,8 @@ class AppNameApplication : Application() {
         super.onCreate()
          
         // Initialize Koin
-        initKoin()
+        initKoin {
+            androidContext(this@AppNameApplication)
+        }
     }
 }

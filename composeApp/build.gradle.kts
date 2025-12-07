@@ -30,6 +30,11 @@ kotlin {
     
     sourceSets {
         androidMain.dependencies {
+            
+            // Google Play Services pour la géolocalisation
+            implementation(libs.play.services.location)
+            implementation(libs.play.services.maps)
+
 
             // Firebase pour les notifications push
             implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.7.0"))

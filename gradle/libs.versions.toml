@@ -1,4 +1,6 @@
 [versions]
+playServicesLocation = "21.1.0"
+playServicesMaps = "18.2.0"
 kmpnotifier = "1.6.0"
 agp = "8.10.0"
 android-compileSdk = "35"
@@ -22,6 +24,8 @@ firebaseFirestore = "2.3.0"
 googleGmsGoogleServices = "4.4.3"
 firebaseAuthVersion = "24.0.1"
 [libraries]
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 kmpnotifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "kmpnotifier" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
