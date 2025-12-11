@@ -44,6 +44,9 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.coroutines.android)
+
+            // IMPORTANT: Google Play Services Auth
+            implementation("com.google.android.gms:play-services-auth:20.7.0")
         }
         
         commonMain.dependencies {
