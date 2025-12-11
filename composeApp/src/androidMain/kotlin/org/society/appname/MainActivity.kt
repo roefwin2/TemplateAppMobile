@@ -15,7 +15,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import org.society.appname.module.authentication.presentation.navigation.AppNavHost
+import org.society.appname.authentication.presentation.navigation.AppNavHost
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 

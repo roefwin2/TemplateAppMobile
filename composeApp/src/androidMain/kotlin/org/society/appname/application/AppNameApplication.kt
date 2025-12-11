@@ -1,7 +1,7 @@
 package org.society.appname.application
 
 import android.app.Application
-import org.society.appname.module.authentication.di.initKoin
+import org.society.appname.di.initKoin
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import org.society.appname.R
