@@ -24,6 +24,10 @@ class PaymentViewModel(
             is PaymentUiEvent.UpdateCurrency -> _uiState.update { it.copy(currency = event.value.lowercase()) }
             is PaymentUiEvent.UpdateDescription -> _uiState.update { it.copy(description = event.value) }
             is PaymentUiEvent.UpdateEmail -> _uiState.update { it.copy(customerEmail = event.value) }
+            is PaymentUiEvent.UpdateCardNumber -> _uiState.update { it.copy(cardNumber = event.value.filterNot { ch -> ch.isWhitespace() }) }
+            is PaymentUiEvent.UpdateExpiryMonth -> _uiState.update { it.copy(expiryMonth = event.value.filter { ch -> ch.isDigit() }.take(2)) }
+            is PaymentUiEvent.UpdateExpiryYear -> _uiState.update { it.copy(expiryYear = event.value.filter { ch -> ch.isDigit() }.take(4)) }
+            is PaymentUiEvent.UpdateCvc -> _uiState.update { it.copy(cvc = event.value.filter { ch -> ch.isDigit() }.take(4)) }
             is PaymentUiEvent.UpdatePublishableKey -> _uiState.update { it.copy(publishableKey = event.value) }
             is PaymentUiEvent.UpdateClientSecret -> _uiState.update { it.copy(clientSecret = event.value) }
             PaymentUiEvent.Submit -> submitPayment()
@@ -34,9 +38,21 @@ class PaymentViewModel(
     private fun submitPayment() {
         val current = _uiState.value
         val amount = current.amountInput.toLongOrNull()
+        val expMonth = current.expiryMonth.toIntOrNull()
+        val expYear = current.expiryYear.toIntOrNull()
 
         if (amount == null || amount <= 0) {
             _uiState.update { it.copy(error = "Montant invalide", resultMessage = null) }
+            return
+        }
+
+        if (current.cardNumber.length !in 13..19 || current.cvc.length !in 3..4) {
+            _uiState.update { it.copy(error = "Informations de carte invalides", resultMessage = null) }
+            return
+        }
+
+        if (expMonth == null || expMonth !in 1..12 || expYear == null || expYear < 2024) {
+            _uiState.update { it.copy(error = "Date d'expiration invalide", resultMessage = null) }
             return
         }
 
@@ -55,6 +71,10 @@ class PaymentViewModel(
                 currency = current.currency.ifBlank { "eur" },
                 description = current.description.ifBlank { null },
                 customerEmail = current.customerEmail.ifBlank { null },
+                cardNumber = current.cardNumber,
+                expiryMonth = expMonth,
+                expiryYear = expYear,
+                cvc = current.cvc,
                 publishableKey = current.publishableKey,
                 clientSecret = current.clientSecret
             )

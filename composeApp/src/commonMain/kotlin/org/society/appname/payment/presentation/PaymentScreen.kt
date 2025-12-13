@@ -63,6 +63,34 @@ fun PaymentScreen(
         )
 
         OutlinedTextField(
+            value = uiState.cardNumber,
+            onValueChange = { viewModel.onEvent(PaymentUiEvent.UpdateCardNumber(it)) },
+            label = { Text("Numéro de carte") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = uiState.expiryMonth,
+            onValueChange = { viewModel.onEvent(PaymentUiEvent.UpdateExpiryMonth(it)) },
+            label = { Text("Mois d'expiration (MM)") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = uiState.expiryYear,
+            onValueChange = { viewModel.onEvent(PaymentUiEvent.UpdateExpiryYear(it)) },
+            label = { Text("Année d'expiration (AAAA)") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = uiState.cvc,
+            onValueChange = { viewModel.onEvent(PaymentUiEvent.UpdateCvc(it)) },
+            label = { Text("CVC") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
             value = uiState.publishableKey,
             onValueChange = { viewModel.onEvent(PaymentUiEvent.UpdatePublishableKey(it)) },
             label = { Text("Clé publique Stripe") }

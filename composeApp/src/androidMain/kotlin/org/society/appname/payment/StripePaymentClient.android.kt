@@ -3,6 +3,8 @@ package org.society.appname.payment
 import android.content.Context
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.Stripe
+import com.stripe.android.model.ConfirmPaymentIntentParams
+import com.stripe.android.model.PaymentMethodCreateParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.society.appname.payment.domain.PaymentRequest
@@ -22,7 +24,21 @@ actual class StripePaymentClient actual constructor(
             if (clientSecret.isBlank()) return@withContext PaymentResult.Error("Client secret Stripe manquant")
 
             val stripe = Stripe(platformConfig.context, request.publishableKey)
-            val paymentIntent = stripe.retrievePaymentIntentSynchronous(clientSecret)
+            val cardParams = PaymentMethodCreateParams.createCard(
+                PaymentMethodCreateParams.Card(
+                    number = request.cardNumber,
+                    expMonth = request.expiryMonth,
+                    expYear = request.expiryYear,
+                    cvc = request.cvc
+                )
+            )
+
+            val confirmParams = ConfirmPaymentIntentParams.createWithPaymentMethodCreateParams(
+                paymentMethodCreateParams = cardParams,
+                clientSecret = clientSecret
+            )
+
+            val paymentIntent = stripe.confirmPaymentIntentSynchronous(confirmParams)
 
             when {
                 paymentIntent == null -> PaymentResult.Error("Impossible de récupérer le PaymentIntent")

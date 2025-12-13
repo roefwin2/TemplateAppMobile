@@ -5,6 +5,10 @@ data class PaymentRequest(
     val currency: String,
     val description: String?,
     val customerEmail: String?,
+    val cardNumber: String,
+    val expiryMonth: Int,
+    val expiryYear: Int,
+    val cvc: String,
     val publishableKey: String,
     val clientSecret: String
 )
