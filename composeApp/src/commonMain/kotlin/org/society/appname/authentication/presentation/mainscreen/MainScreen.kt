@@ -14,6 +14,7 @@ import org.society.appname.authentication.presentation.SessionState
 import org.koin.compose.viewmodel.koinViewModel
 import org.society.appname.authentication.User
 import org.society.appname.geolocation.presentation.MapScreen
+import org.society.appname.payment.presentation.PaymentScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +44,7 @@ fun MainScreen(
                                     0 -> "Accueil"
                                     1 -> "Profil"
                                     2 -> "Paramètres"
+                                    3 -> "Paiement"
                                     else -> "App"
                                 }
                             ) 
@@ -86,6 +88,12 @@ fun MainScreen(
                             selected = selectedTab == 2,
                             onClick = { selectedTab = 2 }
                         )
+                        NavigationBarItem(
+                            icon = { Icon(Icons.Default.CreditCard, contentDescription = "Paiement") },
+                            label = { Text("Paiement") },
+                            selected = selectedTab == 3,
+                            onClick = { selectedTab = 3 }
+                        )
                     }
                 }
             ) { paddingValues ->
@@ -98,6 +106,7 @@ fun MainScreen(
                         0 -> MapScreen()
                         1 -> ProfileScreen(user = state.user)
                         2 -> SettingsScreen(user = state.user)
+                        3 -> PaymentScreen()
                     }
                 }
             }

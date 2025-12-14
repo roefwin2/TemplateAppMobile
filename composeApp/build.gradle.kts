@@ -45,6 +45,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.coroutines.android)
 
+            // Stripe
+            implementation(libs.stripe.android)
+
             // IMPORTANT: Google Play Services Auth
             implementation("com.google.android.gms:play-services-auth:20.7.0")
         }
