@@ -1,10 +1,5 @@
 package org.society.appname.onboarding.data.repository
 
-import com.example.app.feature.onboarding.data.local.OnboardingLocalDataSource
-import com.example.app.feature.onboarding.domain.model.OnboardingDraft
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
-import com.example.app.feature.onboarding.domain.model.UserPreferences
-import com.example.app.feature.onboarding.domain.repository.OnboardingRepository
 import kotlinx.coroutines.flow.StateFlow
 import org.society.appname.onboarding.data.local.OnboardingLocalDataSource
 import org.society.appname.onboarding.domain.model.OnboardingDraft

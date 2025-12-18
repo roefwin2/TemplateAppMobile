@@ -48,12 +48,12 @@ fun OnboardingPager(
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(
-        initialPage = state.currentStep,
+        initialPage = state.currentStep.ordinal,
         pageCount = { state.stepCount }
     )
 
     LaunchedEffect(state.currentStep) {
-        pagerState.animateScrollToPage(state.currentStep)
+        pagerState.animateScrollToPage(state.currentStep.ordinal)
     }
 
     Column(

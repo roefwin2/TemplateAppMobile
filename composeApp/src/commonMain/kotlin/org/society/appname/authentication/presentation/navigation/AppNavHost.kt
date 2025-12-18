@@ -1,10 +1,12 @@
 package org.society.appname.authentication.presentation.navigation
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.rememberNavController
+import org.koin.compose.viewmodel.koinViewModel
 import org.society.appname.authentication.presentation.MainViewModel
 import org.society.appname.authentication.presentation.SessionState
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppNavHost(
@@ -17,12 +19,14 @@ fun AppNavHost(
         is SessionState.Loading -> {
             // Écran de chargement
         }
+
         is SessionState.Unauthenticated -> {
             AuthNavHost(
                 navController = navController,
                 onLoginSuccess = { /* La session sera automatiquement mise à jour */ }
             )
         }
+
         is SessionState.Authenticated -> {
             MainNavHost(
                 navController = navController,

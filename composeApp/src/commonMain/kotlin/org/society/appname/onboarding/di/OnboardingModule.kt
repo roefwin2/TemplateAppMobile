@@ -24,7 +24,7 @@ val onboardingModule = module {
     singleOf(::OnboardingRepositoryImpl) bind OnboardingRepository::class
 
     // Domain
-    factoryOf(SaveOnboardingStepUseCase)
+    factoryOf(::SaveOnboardingStepUseCase)
     factoryOf(::GetOnboardingProgressUseCase)
     factoryOf(::CompleteOnboardingUseCase)
 

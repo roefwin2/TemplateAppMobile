@@ -1,8 +1,8 @@
 package org.society.appname.onboarding.domain.usecase
 
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
-import com.example.app.feature.onboarding.domain.model.UserPreferences
-import com.example.app.feature.onboarding.domain.repository.OnboardingRepository
+import org.society.appname.onboarding.domain.model.OnboardingStep
+import org.society.appname.onboarding.domain.model.UserPreferences
+import org.society.appname.onboarding.domain.repository.OnboardingRepository
 
 /**
  * Validates and persists a single onboarding step.
