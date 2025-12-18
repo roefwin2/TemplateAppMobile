@@ -23,7 +23,7 @@ fun AppNavHost(
         is SessionState.Unauthenticated -> {
             AuthNavHost(
                 navController = navController,
-                onLoginSuccess = { /* La session sera automatiquement mise à jour */ }
+                onAuthComplete = { /* La session sera automatiquement mise à jour */ }
             )
         }
 
