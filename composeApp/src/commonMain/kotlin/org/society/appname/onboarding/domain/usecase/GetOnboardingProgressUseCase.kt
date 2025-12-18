@@ -1,9 +1,9 @@
-package com.example.app.feature.onboarding.domain.usecase
+package org.society.appname.onboarding.domain.usecase
 
-import com.example.app.feature.onboarding.domain.model.OnboardingProgress
-import com.example.app.feature.onboarding.domain.repository.OnboardingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import org.society.appname.onboarding.domain.model.OnboardingProgress
+import org.society.appname.onboarding.domain.repository.OnboardingRepository
 
 /**
  * Observes onboarding progress to support resume capability.

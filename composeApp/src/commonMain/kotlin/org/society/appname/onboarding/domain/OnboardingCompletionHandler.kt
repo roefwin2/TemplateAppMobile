@@ -1,6 +1,6 @@
-package com.example.app.feature.onboarding.domain
+package org.society.appname.onboarding.domain
 
-import com.example.app.feature.onboarding.domain.model.OnboardingData
+import org.society.appname.onboarding.domain.model.OnboardingData
 
 /**
  * Contract used to forward validated onboarding data to the authentication feature.

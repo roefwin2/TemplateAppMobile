@@ -1,9 +1,9 @@
-package com.example.app.feature.onboarding.data.local
+package org.society.appname.onboarding.data.local
 
-import com.example.app.feature.onboarding.domain.model.OnboardingDraft
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.society.appname.onboarding.domain.model.OnboardingDraft
+import org.society.appname.onboarding.domain.model.OnboardingStep
 
 /**
  * In-memory persistence for onboarding data.

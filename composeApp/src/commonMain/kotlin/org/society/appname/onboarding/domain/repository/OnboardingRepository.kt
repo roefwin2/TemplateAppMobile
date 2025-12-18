@@ -1,9 +1,9 @@
-package com.example.app.feature.onboarding.domain.repository
+package org.society.appname.onboarding.domain.repository
 
-import com.example.app.feature.onboarding.domain.model.OnboardingDraft
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
-import com.example.app.feature.onboarding.domain.model.UserPreferences
 import kotlinx.coroutines.flow.StateFlow
+import org.society.appname.onboarding.domain.model.OnboardingDraft
+import org.society.appname.onboarding.domain.model.OnboardingStep
+import org.society.appname.onboarding.domain.model.UserPreferences
 
 /**
  * Repository responsible for persisting the onboarding draft locally.

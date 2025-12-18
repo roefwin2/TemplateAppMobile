@@ -1,17 +1,17 @@
-package com.example.app.feature.onboarding.presentation
+package org.society.appname.onboarding.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
-import com.example.app.feature.onboarding.domain.usecase.CompleteOnboardingUseCase
-import com.example.app.feature.onboarding.domain.usecase.GetOnboardingProgressUseCase
-import com.example.app.feature.onboarding.domain.usecase.OnboardingStepInput
-import com.example.app.feature.onboarding.domain.usecase.SaveOnboardingStepUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.society.appname.onboarding.domain.model.OnboardingStep
+import org.society.appname.onboarding.domain.usecase.CompleteOnboardingUseCase
+import org.society.appname.onboarding.domain.usecase.GetOnboardingProgressUseCase
+import org.society.appname.onboarding.domain.usecase.OnboardingStepInput
+import org.society.appname.onboarding.domain.usecase.SaveOnboardingStepUseCase
 
 /**
  * ViewModel orchestrating onboarding UI events and state.
@@ -40,13 +40,18 @@ class OnboardingViewModel(
             is OnboardingEvent.NavigateTo -> navigateTo(event.step)
             OnboardingEvent.Previous -> moveToPreviousStep()
             OnboardingEvent.Complete -> completeOnboarding()
-            OnboardingEvent.ClearError -> _state.update { it.copy(errorMessage = null, completedData = null) }
+            OnboardingEvent.ClearError -> _state.update {
+                it.copy(
+                    errorMessage = null,
+                    completedData = null
+                )
+            }
         }
     }
 
     private fun observeProgress() {
         viewModelScope.launch {
-            getOnboardingProgressUseCase()
+            getOnboardingProgressUseCase.invoke()
                 .collect { progress ->
                     _state.update {
                         it.copy(

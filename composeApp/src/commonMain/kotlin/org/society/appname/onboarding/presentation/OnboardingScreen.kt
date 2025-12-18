@@ -1,4 +1,4 @@
-package com.example.app.feature.onboarding.presentation
+package org.society.appname.onboarding.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

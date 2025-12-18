@@ -1,4 +1,4 @@
-package com.example.app.feature.onboarding.domain.model
+package org.society.appname.onboarding.domain.model
 
 /**
  * Complete onboarding payload shared with the authentication feature once the user

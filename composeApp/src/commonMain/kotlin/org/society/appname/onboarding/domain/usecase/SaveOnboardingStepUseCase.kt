@@ -1,4 +1,4 @@
-package com.example.app.feature.onboarding.domain.usecase
+package org.society.appname.onboarding.domain.usecase
 
 import com.example.app.feature.onboarding.domain.model.OnboardingStep
 import com.example.app.feature.onboarding.domain.model.UserPreferences

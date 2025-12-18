@@ -1,4 +1,4 @@
-package com.example.app.feature.onboarding.presentation.components
+package org.society.appname.onboarding.presentation.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
-import com.example.app.feature.onboarding.presentation.OnboardingState
+import org.society.appname.onboarding.domain.model.OnboardingStep
+import org.society.appname.onboarding.presentation.OnboardingState
 
 /**
  * Horizontal pager orchestrating all onboarding steps.
@@ -48,12 +48,12 @@ fun OnboardingPager(
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(
-        initialPage = state.currentStep.ordinal,
+        initialPage = state.currentStep,
         pageCount = { state.stepCount }
     )
 
     LaunchedEffect(state.currentStep) {
-        pagerState.animateScrollToPage(state.currentStep.ordinal)
+        pagerState.animateScrollToPage(state.currentStep)
     }
 
     Column(

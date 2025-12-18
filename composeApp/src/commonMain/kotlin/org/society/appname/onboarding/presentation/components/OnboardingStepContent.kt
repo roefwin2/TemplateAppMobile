@@ -1,4 +1,4 @@
-package com.example.app.feature.onboarding.presentation.components
+package org.society.appname.onboarding.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +15,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.app.feature.onboarding.domain.model.OnboardingDraft
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
+import org.society.appname.onboarding.domain.model.OnboardingDraft
+import org.society.appname.onboarding.domain.model.OnboardingStep
 
 /**
  * Displays the content of a single onboarding step.
@@ -202,7 +202,6 @@ private fun ProfileStep(
     Text(
         text = "${bio.length}/180",
         style = MaterialTheme.typography.labelSmall,
-        modifier = Modifier.align(Alignment.End)
     )
 }
 
@@ -227,7 +226,10 @@ private fun SummaryStep(draft: OnboardingDraft) {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            SummaryLine(label = "Name", value = "${draft.firstName.orEmpty()} ${draft.lastName.orEmpty()}".trim())
+            SummaryLine(
+                label = "Name",
+                value = "${draft.firstName.orEmpty()} ${draft.lastName.orEmpty()}".trim()
+            )
             HorizontalDivider()
             val prefs = draft.preferences
             SummaryLine(
@@ -253,6 +255,10 @@ private fun SummaryStep(draft: OnboardingDraft) {
 private fun SummaryLine(label: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(text = label, style = MaterialTheme.typography.labelLarge)
-        Text(text = value, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Medium
+        )
     }
 }

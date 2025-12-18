@@ -1,4 +1,4 @@
-package com.example.app.feature.onboarding.presentation.components
+package org.society.appname.onboarding.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

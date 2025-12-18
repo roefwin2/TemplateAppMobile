@@ -1,19 +1,19 @@
-package com.example.app.feature.onboarding.di
+package org.society.appname.onboarding.di
 
-import com.example.app.feature.onboarding.data.local.OnboardingLocalDataSource
-import com.example.app.feature.onboarding.data.repository.OnboardingRepositoryImpl
-import com.example.app.feature.onboarding.domain.OnboardingCompletionHandler
-import com.example.app.feature.onboarding.domain.model.OnboardingData
-import com.example.app.feature.onboarding.domain.repository.OnboardingRepository
-import com.example.app.feature.onboarding.domain.usecase.CompleteOnboardingUseCase
-import com.example.app.feature.onboarding.domain.usecase.GetOnboardingProgressUseCase
-import com.example.app.feature.onboarding.domain.usecase.SaveOnboardingStepUseCase
-import com.example.app.feature.onboarding.presentation.OnboardingViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import org.society.appname.onboarding.data.local.OnboardingLocalDataSource
+import org.society.appname.onboarding.data.repository.OnboardingRepositoryImpl
+import org.society.appname.onboarding.domain.OnboardingCompletionHandler
+import org.society.appname.onboarding.domain.model.OnboardingData
+import org.society.appname.onboarding.domain.repository.OnboardingRepository
+import org.society.appname.onboarding.domain.usecase.CompleteOnboardingUseCase
+import org.society.appname.onboarding.domain.usecase.GetOnboardingProgressUseCase
+import org.society.appname.onboarding.domain.usecase.SaveOnboardingStepUseCase
+import org.society.appname.onboarding.presentation.OnboardingViewModel
 
 /**
  * Koin module for the onboarding feature.
@@ -24,7 +24,7 @@ val onboardingModule = module {
     singleOf(::OnboardingRepositoryImpl) bind OnboardingRepository::class
 
     // Domain
-    factoryOf(::SaveOnboardingStepUseCase)
+    factoryOf(SaveOnboardingStepUseCase)
     factoryOf(::GetOnboardingProgressUseCase)
     factoryOf(::CompleteOnboardingUseCase)
 

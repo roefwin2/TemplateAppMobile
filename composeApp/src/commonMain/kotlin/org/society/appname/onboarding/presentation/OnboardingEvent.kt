@@ -1,6 +1,6 @@
-package com.example.app.feature.onboarding.presentation
+package org.society.appname.onboarding.presentation
 
-import com.example.app.feature.onboarding.domain.model.OnboardingStep
+import org.society.appname.onboarding.domain.model.OnboardingStep
 
 /**
  * UI events emitted by the onboarding screen.
