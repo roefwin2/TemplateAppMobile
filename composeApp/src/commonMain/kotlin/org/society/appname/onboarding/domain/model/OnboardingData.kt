@@ -1,90 +1,129 @@
 package org.society.appname.onboarding.domain.model
 
 /**
- * Complete onboarding payload shared with the authentication feature once the user
- * validated every step.
- */
-data class OnboardingData(
-    val firstName: String,
-    val lastName: String,
-    val preferences: UserPreferences,
-    val profileImageUri: String?,
-    val bio: String?
-)
-
-/**
- * User preferences collected during onboarding.
- */
-data class UserPreferences(
-    val darkMode: Boolean,
-    val notificationsEnabled: Boolean,
-    val language: String
-)
-
-/**
- * Mutable, partial representation of the onboarding flow.
+ * Draft de l'onboarding en cours - stocke toutes les données collectées
  */
 data class OnboardingDraft(
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val preferences: UserPreferences? = null,
-    val profileImageUri: String? = null,
-    val bio: String? = null
+    // ===== Champs d'inscription =====
+    val displayName: String = "",
+    val email: String = "",
+    val phoneNumber: String = "",
+    val password: String = "",
+    val confirmPassword: String = "",
+
+    // ===== Réponses aux questions =====
+    val answers: Map<String, OnboardingAnswer> = emptyMap(),
+
+    // ===== Navigation =====
+    val currentStepIndex: Int = 0
 ) {
-    /**
-     * Returns true when required welcome information is present.
-     */
-    val hasWelcomeData: Boolean
-        get() = !firstName.isNullOrBlank() && !lastName.isNullOrBlank()
+    // ===== Helpers pour récupérer les réponses =====
 
-    /**
-     * Returns true when preferences were explicitly set by the user.
-     */
-    val hasPreferences: Boolean
-        get() = preferences != null
+    fun getAnswer(stepId: String): OnboardingAnswer? = answers[stepId]
 
-    /**
-     * Builds a final [OnboardingData] instance when all mandatory fields are filled.
-     */
+    fun getSingleChoiceAnswer(stepId: String): String? =
+        (answers[stepId] as? OnboardingAnswer.SingleChoiceAnswer)?.selectedOptionId
+
+    fun getMultiChoiceAnswers(stepId: String): List<String> =
+        (answers[stepId] as? OnboardingAnswer.MultiChoiceAnswer)?.selectedOptionIds ?: emptyList()
+
+    fun getTextAnswer(stepId: String): String =
+        (answers[stepId] as? OnboardingAnswer.TextAnswer)?.text ?: ""
+
+    // ===== Validation =====
+
+    val isRegistrationValid: Boolean
+        get() = displayName.isNotBlank() &&
+                email.isNotBlank() &&
+                password.isNotBlank() &&
+                password == confirmPassword &&
+                password.length >= 8
+
+    // ===== Conversion vers données finales =====
+
     fun toOnboardingData(): OnboardingData? {
-        val localPreferences = preferences
-        val localFirstName = firstName
-        val localLastName = lastName
-        if (localPreferences == null || localFirstName.isNullOrBlank() || localLastName.isNullOrBlank()) {
-            return null
-        }
+        if (!isRegistrationValid) return null
         return OnboardingData(
-            firstName = localFirstName.trim(),
-            lastName = localLastName.trim(),
-            preferences = localPreferences,
-            profileImageUri = profileImageUri?.takeIf { it.isNotBlank() },
-            bio = bio?.takeIf { it.isNotBlank() }
+            displayName = displayName.trim(),
+            email = email.trim(),
+            phoneNumber = phoneNumber.trim().takeIf { it.isNotEmpty() },
+            answers = answers,
+            preferences = extractPreferences()
         )
     }
-}
 
-/**
- * Ordered steps used by the onboarding pager.
- */
-enum class OnboardingStep {
-    Welcome,
-    Preferences,
-    Profile,
-    Summary;
+    /**
+     * Extrait les préférences des réponses collectées
+     */
+    private fun extractPreferences(): UserPreferences {
+        return UserPreferences(
+            favoriteCuisines = getMultiChoiceAnswers("cuisines"),
+            experienceLevel = getSingleChoiceAnswer("experience"),
+            interests = getMultiChoiceAnswers("interests"),
+            favoriteDish = getTextAnswer("favorite_dish").takeIf { it.isNotEmpty() },
+            signatureDrink = getTextAnswer("signature_drink").takeIf { it.isNotEmpty() },
+            personality = getMultiChoiceAnswers("personality")
+        )
+    }
 
-    companion object {
-        /**
-         * Returns the total number of steps.
-         */
-        val count: Int get() = entries.size
+    // ===== Copie avec mise à jour des réponses =====
+
+    fun withAnswer(answer: OnboardingAnswer): OnboardingDraft {
+        return copy(answers = answers + (answer.stepId to answer))
+    }
+
+    fun withSingleChoice(stepId: String, optionId: String): OnboardingDraft {
+        return withAnswer(OnboardingAnswer.SingleChoiceAnswer(stepId, optionId))
+    }
+
+    fun withMultiChoice(stepId: String, optionIds: List<String>): OnboardingDraft {
+        return withAnswer(OnboardingAnswer.MultiChoiceAnswer(stepId, optionIds))
+    }
+
+    fun withText(stepId: String, text: String): OnboardingDraft {
+        return withAnswer(OnboardingAnswer.TextAnswer(stepId, text))
+    }
+
+    fun toggleMultiChoice(stepId: String, optionId: String, maxSelections: Int? = null): OnboardingDraft {
+        val currentSelections = getMultiChoiceAnswers(stepId).toMutableList()
+
+        if (currentSelections.contains(optionId)) {
+            currentSelections.remove(optionId)
+        } else {
+            // Vérifier la limite max
+            if (maxSelections != null && currentSelections.size >= maxSelections) {
+                // Remplacer le premier élément
+                currentSelections.removeAt(0)
+            }
+            currentSelections.add(optionId)
+        }
+
+        return withMultiChoice(stepId, currentSelections)
     }
 }
 
 /**
- * Progress snapshot returned by the domain layer.
+ * Données finales de l'onboarding après validation
  */
-data class OnboardingProgress(
-    val currentStep: OnboardingStep,
-    val totalSteps: Int = OnboardingStep.count,
-    val draft: OnboardingDraft
+data class OnboardingData(
+    val displayName: String,
+    val email: String,
+    val phoneNumber: String? = null,
+    val answers: Map<String, OnboardingAnswer> = emptyMap(),
+    val preferences: UserPreferences = UserPreferences()
+)
+
+/**
+ * Préférences utilisateur extraites des réponses
+ */
+data class UserPreferences(
+    val favoriteCuisines: List<String> = emptyList(),
+    val experienceLevel: String? = null,
+    val interests: List<String> = emptyList(),
+    val favoriteDish: String? = null,
+    val signatureDrink: String? = null,
+    val personality: List<String> = emptyList(),
+    val darkMode: Boolean = false,
+    val notificationsEnabled: Boolean = true,
+    val language: String = "fr"
 )
