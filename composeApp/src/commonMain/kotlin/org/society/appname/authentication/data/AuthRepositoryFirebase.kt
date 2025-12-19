@@ -282,6 +282,10 @@ class AuthRepositoryFirebase(
                 println("⚠️ Erreur dans observeAuthState: ${exception.message}")
                 emit(null)
             }
+
+    override suspend fun deleteAccount(): AuthResult<Unit> {
+        TODO("Not yet implemented")
+    }
 }
 
 private fun FirebaseUser.toUser() = User(
