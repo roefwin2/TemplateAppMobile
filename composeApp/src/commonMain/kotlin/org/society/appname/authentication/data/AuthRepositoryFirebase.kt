@@ -312,6 +312,7 @@ class AuthRepositoryFirebase(
                     auth.currentUser?.delete()
                 } catch (e: Exception) {
                     println("Erreur suppression compte Firebase: ${e.message}")
+                    AuthResult.Error(e)
                 }
             }
 

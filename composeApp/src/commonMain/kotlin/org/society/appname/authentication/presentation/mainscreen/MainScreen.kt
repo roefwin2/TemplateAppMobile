@@ -1,18 +1,54 @@
 package org.society.appname.authentication.presentation.mainscreen
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import org.society.appname.authentication.presentation.MainViewModel
-import org.society.appname.authentication.presentation.SessionState
 import org.koin.compose.viewmodel.koinViewModel
 import org.society.appname.authentication.User
+import org.society.appname.authentication.presentation.MainViewModel
+import org.society.appname.authentication.presentation.SessionState
+import org.society.appname.authentication.presentation.settings.SettingsScreen
 import org.society.appname.geolocation.presentation.MapScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,11 +69,12 @@ fun MainScreen(
                 CircularProgressIndicator()
             }
         }
+
         is SessionState.Authenticated -> {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { 
+                        title = {
                             Text(
                                 when (selectedTab) {
                                     0 -> "Accueil"
@@ -45,7 +82,7 @@ fun MainScreen(
                                     2 -> "Paramètres"
                                     else -> "App"
                                 }
-                            ) 
+                            )
                         },
                         actions = {
                             IconButton(
@@ -81,7 +118,12 @@ fun MainScreen(
                             onClick = { selectedTab = 1 }
                         )
                         NavigationBarItem(
-                            icon = { Icon(Icons.Default.Settings, contentDescription = "Paramètres") },
+                            icon = {
+                                Icon(
+                                    Icons.Default.Settings,
+                                    contentDescription = "Paramètres"
+                                )
+                            },
                             label = { Text("Paramètres") },
                             selected = selectedTab == 2,
                             onClick = { selectedTab = 2 }
@@ -97,11 +139,17 @@ fun MainScreen(
                     when (selectedTab) {
                         0 -> MapScreen()
                         1 -> ProfileScreen(user = state.user)
-                        2 -> SettingsScreen(user = state.user)
+                        2 -> SettingsScreen(
+                            user = state.user,
+                            onNavigateBack = { onLogout.invoke() },
+                            onLogoutSuccess = { onLogout.invoke() },
+                            onAccountDeleted = { onLogout.invoke() }
+                        )
                     }
                 }
             }
         }
+
         is SessionState.Unauthenticated -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -202,21 +250,21 @@ private fun ProfileScreen(user: User) {
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 ProfileInfoRow(
                     icon = Icons.Default.Person,
                     label = "Nom",
                     value = user.displayName ?: "Non renseigné"
                 )
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
-                
+
                 ProfileInfoRow(
                     icon = Icons.Default.Email,
                     label = "Email",
                     value = user.email ?: "Non renseigné"
                 )
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
-                
+
                 user.number?.let { number ->
                     ProfileInfoRow(
                         icon = Icons.Default.Phone,
@@ -225,7 +273,7 @@ private fun ProfileScreen(user: User) {
                     )
                     Divider(modifier = Modifier.padding(vertical = 8.dp))
                 }
-                
+
                 ProfileInfoRow(
                     icon = Icons.Default.VerifiedUser,
                     label = "Email vérifié",
@@ -263,115 +311,5 @@ private fun ProfileInfoRow(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
-    }
-}
-
-@Composable
-private fun SettingsScreen(user: User) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Paramètres",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                SettingItem(
-                    icon = Icons.Default.Notifications,
-                    title = "Notifications",
-                    subtitle = "Gérer les notifications"
-                )
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
-                
-                SettingItem(
-                    icon = Icons.Default.Security,
-                    title = "Sécurité",
-                    subtitle = "Mot de passe et authentification"
-                )
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
-                
-                SettingItem(
-                    icon = Icons.Default.Language,
-                    title = "Langue",
-                    subtitle = "Français"
-                )
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
-                
-                SettingItem(
-                    icon = Icons.Default.DarkMode,
-                    title = "Thème",
-                    subtitle = "Clair / Sombre"
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                SettingItem(
-                    icon = Icons.Default.Info,
-                    title = "À propos",
-                    subtitle = "Version 1.0.0"
-                )
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
-                
-                SettingItem(
-                    icon = Icons.Default.Help,
-                    title = "Aide",
-                    subtitle = "Centre d'aide et FAQ"
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SettingItem(
-    icon: ImageVector,
-    title: String,
-    subtitle: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Icon(
-            imageVector = Icons.Default.ChevronRight,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }
