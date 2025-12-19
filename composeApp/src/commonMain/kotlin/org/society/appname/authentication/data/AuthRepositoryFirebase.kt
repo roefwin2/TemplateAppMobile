@@ -235,6 +235,15 @@ class AuthRepositoryFirebase(
             AuthResult.Error(t)
         }
 
+    override suspend fun sendPasswordResetEmail(email: String): AuthResult<Unit> {
+        return try {
+            auth.sendPasswordResetEmail(email)
+            AuthResult.Success(Unit)
+        } catch (e: Exception) {
+            AuthResult.Error(e)
+        }
+    }
+
     override suspend fun saveFcmToken(token: String): AuthResult<Unit> {
         return try {
             val userId = auth.currentUser?.uid
@@ -273,6 +282,10 @@ class AuthRepositoryFirebase(
                 println("⚠️ Erreur dans observeAuthState: ${exception.message}")
                 emit(null)
             }
+
+    override suspend fun deleteAccount(): AuthResult<Unit> {
+        TODO("Not yet implemented")
+    }
 }
 
 private fun FirebaseUser.toUser() = User(

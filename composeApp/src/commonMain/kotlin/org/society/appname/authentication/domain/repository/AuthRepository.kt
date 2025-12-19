@@ -9,7 +9,9 @@ interface AuthRepository {
     suspend fun signInWithGoogleIdToken(idToken: String): AuthResult<User>
     suspend fun signInWithAppleIdToken(idToken: String, rawNonce: String, fullName: String? = null): AuthResult<User>
     suspend fun register(email: String, password: String, displayName: String, number: String): AuthResult<User>
+    suspend fun sendPasswordResetEmail(email: String): AuthResult<Unit>
     suspend fun saveFcmToken(token: String): AuthResult<Unit>
     suspend fun logout(): AuthResult<Unit>
     fun observeAuthState(): Flow<User?>
+    suspend fun deleteAccount(): AuthResult<Unit>
 }

@@ -1,13 +1,17 @@
 package org.society.appname.authentication.presentation.navigation
 
-import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.society.appname.authentication.presentation.login.LoginScreen
+import org.society.appname.authentication.presentation.password.ForgotPasswordScreen
 import org.society.appname.authentication.presentation.welcome.WelcomeScreen
 import org.society.appname.onboarding.presentation.OnboardingScreen
 
@@ -111,39 +115,8 @@ fun AuthNavHost(
             ForgotPasswordScreen(
                 onNavigateBack = {
                     navController.popBackStack()
-                },
-                onSuccess = {
-                    navController.popBackStack()
                 }
             )
         }
-    }
-}
-
-/**
- * Simple forgot password placeholder screen
- * You can expand this with full functionality
- */
-@Composable
-private fun ForgotPasswordScreen(
-    onNavigateBack: () -> Unit,
-    onSuccess: () -> Unit
-) {
-    // Placeholder - implement as needed
-    // This would contain email input and password reset logic
-}
-
-/**
- * Navigation extension for checking if user should see onboarding
- * Use this to determine the start destination
- */
-fun shouldShowOnboarding(
-    isFirstLaunch: Boolean,
-    isLoggedIn: Boolean
-): String {
-    return when {
-        isLoggedIn -> AuthRoutes.WELCOME // Or skip directly to main app
-        isFirstLaunch -> AuthRoutes.WELCOME
-        else -> AuthRoutes.LOGIN // Returning user who logged out
     }
 }
