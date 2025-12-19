@@ -19,6 +19,7 @@ import org.koin.dsl.module
 import org.society.appname.authentication.domain.usecase.AppleSignInUseCase
 import org.society.appname.authentication.domain.usecase.GoogleSignInUseCase
 import org.society.appname.authentication.presentation.password.ForgotPasswordViewModel
+import org.society.appname.authentication.presentation.settings.SettingsViewModel
 
 val authModule = module {
     // Firebase
@@ -40,5 +41,6 @@ val authModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::RegisterViewModel)
     viewModelOf(::ForgotPasswordViewModel)
+    viewModelOf(::SettingsViewModel)
     viewModelOf(::MainViewModel)
 }

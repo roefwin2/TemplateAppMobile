@@ -5,9 +5,11 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.GoogleAuthProvider
 import dev.gitlive.firebase.auth.OAuthProvider
 import dev.gitlive.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.society.appname.authentication.AuthResult
 import org.society.appname.authentication.User
 import org.society.appname.authentication.domain.repository.AuthRepository
@@ -284,7 +286,42 @@ class AuthRepositoryFirebase(
             }
 
     override suspend fun deleteAccount(): AuthResult<Unit> {
-        TODO("Not yet implemented")
+        return try {
+            val userId = auth.currentUser?.uid
+                ?: return AuthResult.Error(Exception("No authenticated user"))
+
+            // Utiliser NonCancellable pour garantir que toutes les opérations s'exécutent
+            withContext(NonCancellable) {
+                // 1. Supprimer les données Firestore de l'utilisateur
+                try {
+                    usersDoc(userId).delete()
+                } catch (e: Exception) {
+                    println("Erreur suppression document utilisateur: ${e.message}")
+                }
+                //TODO 3. Déconnecter l'utilisateur de RevenueCat
+
+                // 4. Se déconnecter des providers sociaux
+                try {
+                    socialAuthManager.signOut()
+                } catch (e: Exception) {
+                    println("Erreur signOut social: ${e.message}")
+                }
+
+                // 5. Supprimer le compte Firebase Auth (en dernier)
+                try {
+                    auth.currentUser?.delete()
+                } catch (e: Exception) {
+                    println("Erreur suppression compte Firebase: ${e.message}")
+                    AuthResult.Error(e)
+                }
+            }
+
+            AuthResult.Success(Unit)
+        } catch (e: Exception) {
+            println("Erreur lors de la suppression du compte: ${e.message}")
+            e.printStackTrace()
+            AuthResult.Error(e)
+        }
     }
 }
 
