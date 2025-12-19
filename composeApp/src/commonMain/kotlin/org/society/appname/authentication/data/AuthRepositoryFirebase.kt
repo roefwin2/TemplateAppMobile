@@ -219,7 +219,7 @@ class AuthRepositoryFirebase(
                     displayName = displayName,
                     isEmailVerified = user.isEmailVerified,
                     createdAt = nowMs(),
-                    isOnboardingCompleted = false
+                    isOnboardingCompleted = true
                 )
                 val res = saveUser(patch)
                 res as? AuthResult.Error

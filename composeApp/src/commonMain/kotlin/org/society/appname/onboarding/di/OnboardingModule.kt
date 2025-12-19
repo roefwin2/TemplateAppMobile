@@ -14,7 +14,6 @@ import org.society.appname.onboarding.domain.usecase.CompleteOnboardingUseCase
 import org.society.appname.onboarding.domain.usecase.GetOnboardingProgressUseCase
 import org.society.appname.onboarding.domain.usecase.SaveOnboardingStepUseCase
 import org.society.appname.onboarding.presentation.OnboardingBisViewModel
-import org.society.appname.onboarding.presentation.OnboardingViewModel
 
 /**
  * Koin module for the onboarding feature.
@@ -33,7 +32,6 @@ val onboardingModule = module {
     single<OnboardingCompletionHandler> { LoggingOnboardingCompletionHandler() }
 
     // Presentation
-    viewModelOf(::OnboardingViewModel)
     viewModelOf(::OnboardingBisViewModel)
 }
 
