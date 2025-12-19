@@ -25,7 +25,7 @@ data class OnboardingUiState(
     val confirmPasswordError: String? = null
 )
 
-class OnboardingBisViewModel(
+class OnboardingViewModel(
     private val registerUseCase: RegisterUseCase
 ) : ViewModel() {
 

@@ -80,7 +80,7 @@ val onboardingFeatures = listOf(
 @Composable
 fun OnboardingScreen(
     onComplete: () -> Unit,
-    viewModel: OnboardingBisViewModel = koinViewModel()
+    viewModel: OnboardingViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val registrationSuccess by viewModel.registrationSuccess.collectAsState()
