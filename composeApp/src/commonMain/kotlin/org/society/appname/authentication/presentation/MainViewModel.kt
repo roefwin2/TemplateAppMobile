@@ -17,6 +17,7 @@ import org.society.appname.authentication.domain.repository.AuthRepository
 sealed class SessionState {
     data object Loading : SessionState()
     data object Unauthenticated : SessionState()
+    data class NeedsOnboarding(val user: User) : SessionState()
     data class Authenticated(val user: User) : SessionState()
 }
 
@@ -44,19 +45,30 @@ class MainViewModel(
 
         authObserverJob = viewModelScope.launch {
             authRepository.observeAuthState()
-                .catch { exception ->
-                    println("⚠️ Erreur dans observeAuthState: ${exception.message}")
+                .catch {
                     _sessionState.value = SessionState.Unauthenticated
                 }
                 .collect { user ->
-                    _sessionState.value = if (user != null) {
-                        SessionState.Authenticated(user)
+                    if (user == null) {
+                        _sessionState.value = SessionState.Unauthenticated
                     } else {
-                        SessionState.Unauthenticated
+                        _sessionState.value = SessionState.Loading
+                        val completed = authRepository.isOnboardingCompleted(user.uid)
+                        _sessionState.value =
+                            if (completed) SessionState.Authenticated(user)
+                            else SessionState.NeedsOnboarding(user)
                     }
                 }
         }
     }
+
+    fun onOnboardingCompleted() {
+        val currentUser = (sessionState.value as? SessionState.NeedsOnboarding)?.user
+        if (currentUser != null) {
+            _sessionState.value = SessionState.Authenticated(currentUser)
+        }
+    }
+
 
     /**
      * Déconnexion

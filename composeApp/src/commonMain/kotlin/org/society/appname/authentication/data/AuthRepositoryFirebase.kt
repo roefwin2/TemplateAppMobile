@@ -14,6 +14,7 @@ import org.society.appname.authentication.AuthResult
 import org.society.appname.authentication.User
 import org.society.appname.authentication.domain.repository.AuthRepository
 import org.society.appname.authentication.providers.SocialAuthManager
+import org.society.appname.core.helpers.getOrNull
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Clock.System
 import kotlin.time.ExperimentalTime
@@ -221,21 +222,115 @@ class AuthRepositoryFirebase(
                     displayName = displayName,
                     isEmailVerified = user.isEmailVerified,
                     createdAt = nowMs(),
-                    isOnboardingCompleted = true
+                    isOnboardingCompleted = false
                 )
                 val res = saveUser(patch)
+                println("Registration : $res")
                 res as? AuthResult.Error
                     ?: AuthResult.Success(
-                        user.toUser().copy(displayName = displayName)
+                        user.toUser()
                     )
             } else {
                 println("Registration failed FirebaseUser : $user")
                 AuthResult.Error(Exception("Registration failed"))
             }
+        } catch (e: CancellationException) {
+            // Important: ne pas transformer une annulation en "erreur"
+            throw e
         } catch (t: Throwable) {
             println("❌ Erreur register: ${t.message}")
             AuthResult.Error(t)
         }
+
+    override suspend fun isOnboardingCompleted(uid: String): Boolean {
+        return try {
+            val userId = auth.currentUser?.uid
+                ?: return false
+
+            val snap = usersDoc(userId).get()
+            if (!snap.exists) return false
+            val completed = snap.getOrNull<Boolean>("isOnboardingCompleted") == true
+            completed
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    // ========================================
+    // USER DATA - GENERIC
+    // ========================================
+
+    override suspend fun saveUserData(data: Map<String, Any?>): AuthResult<Unit> {
+        return try {
+            val uid = auth.currentUser?.uid
+                ?: return AuthResult.Error(Exception("No authenticated user"))
+
+            // Ajouter le timestamp de mise à jour
+            val dataWithTimestamp = data + ("updatedAt" to nowMs())
+
+            usersDoc(uid).set(dataWithTimestamp, merge = true)
+
+            println("✅ User data saved: ${data.keys}")
+            AuthResult.Success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            println("❌ Error saving user data: ${e.message}")
+            AuthResult.Error(e)
+        }
+    }
+
+    // ========================================
+    // ONBOARDING DATA
+    // ========================================
+
+    override suspend fun saveOnboardingPreferences(preferences: Map<String, Any?>): AuthResult<Unit> {
+        return try {
+            val uid = auth.currentUser?.uid
+                ?: return AuthResult.Error(Exception("No authenticated user"))
+
+            // Sauvegarder les préférences dans un champ "preferences"
+            val data = mapOf(
+                "preferences" to preferences,
+                "updatedAt" to nowMs()
+            )
+
+            usersDoc(uid).set(data, merge = true)
+
+            println("✅ Onboarding preferences saved")
+            AuthResult.Success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            println("❌ Error saving onboarding preferences: ${e.message}")
+            AuthResult.Error(e)
+        }
+    }
+
+    override suspend fun markOnboardingCompleted(): AuthResult<Unit> {
+        return try {
+            val uid = auth.currentUser?.uid
+                ?: return AuthResult.Error(Exception("No authenticated user"))
+
+            usersDoc(uid).set(
+                mapOf(
+                    "isOnboardingCompleted" to true,
+                    "onboardingCompletedAt" to nowMs(),
+                    "updatedAt" to nowMs()
+                ),
+                merge = true
+            )
+
+            println("✅ Onboarding marked as completed")
+            AuthResult.Success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            println("❌ Error marking onboarding completed: ${e.message}")
+            AuthResult.Error(e)
+        }
+    }
+
 
     override suspend fun sendPasswordResetEmail(email: String): AuthResult<Unit> {
         return try {

@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.society.appname.authentication.AuthResult
-import org.society.appname.authentication.domain.usecase.RegisterUseCase
 import org.society.appname.onboarding.data.local.OnboardingLocalDataSource
 import org.society.appname.onboarding.domain.model.OnboardingConfig
 import org.society.appname.onboarding.domain.model.OnboardingDraft
 import org.society.appname.onboarding.domain.model.OnboardingStepConfig
+import org.society.appname.onboarding.domain.usecases.CompleteOnboardingUseCase
 
 /**
  * État UI de l'onboarding
@@ -49,10 +49,15 @@ data class OnboardingUiState(
 
 /**
  * ViewModel pour l'onboarding
+ *
+ * Utilise CompleteOnboardingUseCase pour:
+ * - Créer le compte
+ * - Sauvegarder les préférences dans Firestore
+ * - Marquer l'onboarding comme complété
  */
 class OnboardingViewModel(
     private val localDataSource: OnboardingLocalDataSource,
-    private val registerUseCase: RegisterUseCase
+    private val completeOnboardingUseCase: CompleteOnboardingUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OnboardingUiState())
@@ -62,7 +67,10 @@ class OnboardingViewModel(
     val registrationSuccess: StateFlow<Boolean> = _registrationSuccess.asStateFlow()
 
     init {
-        // Observer le draft local et synchroniser avec l'UI
+        observeDraft()
+    }
+
+    private fun observeDraft() {
         viewModelScope.launch {
             localDataSource.draft.collect { draft ->
                 _uiState.update { state ->
@@ -81,24 +89,22 @@ class OnboardingViewModel(
     fun nextStep() {
         val currentState = _uiState.value
 
-        // Valider le step actuel avant de continuer
         if (!validateCurrentStep()) {
             return
         }
 
-        // Si c'est le step d'inscription, lancer la registration
+        // Si c'est le step d'inscription, lancer l'onboarding complet
         if (currentState.currentStep is OnboardingStepConfig.Registration) {
-            register()
+            completeOnboarding()
             return
         }
 
         // Si c'est le dernier step (summary), terminer
         if (currentState.isLastStep) {
-            completeOnboarding()
+            _registrationSuccess.value = true
             return
         }
 
-        // Sinon, passer au step suivant
         localDataSource.nextStep()
         clearErrors()
     }
@@ -232,9 +238,7 @@ class OnboardingViewModel(
 
             is OnboardingStepConfig.TextInputOptional -> true
 
-            is OnboardingStepConfig.Registration -> {
-                validateRegistrationFields()
-            }
+            is OnboardingStepConfig.Registration -> validateRegistrationFields()
         }
     }
 
@@ -289,9 +293,16 @@ class OnboardingViewModel(
         return isValid
     }
 
-    // ===== Registration =====
+    // ===== Onboarding Completion =====
 
-    private fun register() {
+    /**
+     * Lance le processus complet d'onboarding:
+     * 1. Création du compte Firebase
+     * 2. Sauvegarde des préférences dans Firestore
+     * 3. Sauvegarde des réponses
+     * 4. Marquage onboarding complété
+     */
+    private fun completeOnboarding() {
         if (!validateRegistrationFields()) return
 
         val draft = _uiState.value.draft
@@ -299,12 +310,7 @@ class OnboardingViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            val result = registerUseCase(
-                email = draft.email.trim(),
-                password = draft.password,
-                displayName = draft.displayName.trim(),
-                number = draft.phoneNumber.trim()
-            )
+            val result = completeOnboardingUseCase(draft)
 
             when (result) {
                 is AuthResult.Success -> {
@@ -323,12 +329,6 @@ class OnboardingViewModel(
                 }
             }
         }
-    }
-
-    private fun completeOnboarding() {
-        // Sauvegarder les préférences finales si nécessaire
-        // Puis signaler que l'onboarding est terminé
-        _registrationSuccess.value = true
     }
 
     private fun mapErrorMessage(exception: Throwable): String {

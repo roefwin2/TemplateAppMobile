@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import org.koin.compose.viewmodel.koinViewModel
 import org.society.appname.authentication.presentation.MainViewModel
 import org.society.appname.authentication.presentation.SessionState
+import org.society.appname.onboarding.presentation.OnboardingScreen
 
 @Composable
 fun AppNavHost(
@@ -31,6 +32,14 @@ fun AppNavHost(
             MainNavHost(
                 navController = navController,
                 onLogout = { /* La déconnexion est gérée par le ViewModel */ }
+            )
+        }
+
+        is SessionState.NeedsOnboarding -> {
+            OnboardingScreen(
+                onComplete = {
+                    mainViewModel.onOnboardingCompleted()
+                }
             )
         }
     }

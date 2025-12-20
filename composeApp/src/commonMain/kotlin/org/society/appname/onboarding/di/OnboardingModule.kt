@@ -6,6 +6,8 @@ import org.koin.dsl.module
 import org.society.appname.onboarding.data.local.OnboardingLocalDataSource
 import org.society.appname.onboarding.domain.OnboardingCompletionHandler
 import org.society.appname.onboarding.domain.model.OnboardingData
+import org.society.appname.onboarding.domain.usecases.CompleteOnboardingUseCase
+import org.society.appname.onboarding.domain.usecases.SaveOnboardingPreferencesUseCase
 import org.society.appname.onboarding.presentation.OnboardingViewModel
 
 /**
@@ -16,6 +18,12 @@ val onboardingModule = module {
     singleOf(::OnboardingLocalDataSource)
     // Communication with authentication
     single<OnboardingCompletionHandler> { LoggingOnboardingCompletionHandler() }
+
+    // Use case pour sauvegarder les préférences d'onboarding
+    factory { SaveOnboardingPreferencesUseCase(authRepository = get()) }
+
+    // Use case complet pour l'onboarding (register + save preferences)
+    factory { CompleteOnboardingUseCase(authRepository = get()) }
 
     // Presentation
     viewModelOf(::OnboardingViewModel)

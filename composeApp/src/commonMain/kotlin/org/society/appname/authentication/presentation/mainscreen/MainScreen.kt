@@ -166,6 +166,10 @@ fun MainScreen(
                 }
             }
         }
+
+        is SessionState.NeedsOnboarding -> {
+
+        }
     }
 }
 
