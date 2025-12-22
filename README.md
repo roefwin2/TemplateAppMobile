@@ -33,3 +33,31 @@ in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and r
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## Comment lancer les tests
+
+### Tests unitaires (KMP)
+
+```shell
+./gradlew :composeApp:test
+```
+
+### Tests UI Android (instrumentation)
+
+```shell
+./gradlew :composeApp:connectedAndroidTest
+```
+
+### Tests Desktop
+
+Ce projet ne définit pas de target Desktop/JVM (`jvmMain`/`desktop`), donc aucun test UI Desktop n'est
+configuré pour l’instant. Si un target Desktop est ajouté, on pourra activer les tests UI via
+`org.jetbrains.compose.uiTest`.
+
+## Dépannage
+
+* **Les tests UI Android ne démarrent pas** : vérifiez qu’un émulateur ou un appareil est connecté,
+  et que le runner est `androidx.test.runner.AndroidJUnitRunner`.
+* **Composables introuvables en test** : assurez-vous d’avoir des `Modifier.testTag(...)` stables
+  sur les éléments testés.
+* **Tests coroutines instables** : utilisez `runTest` et évitez les délais arbitraires.

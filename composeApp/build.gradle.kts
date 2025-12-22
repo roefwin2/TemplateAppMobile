@@ -47,6 +47,9 @@ kotlin {
 
             // IMPORTANT: Google Play Services Auth
             implementation("com.google.android.gms:play-services-auth:20.7.0")
+            implementation(libs.androidx.testExt.junit)
+            implementation(libs.androidx.espresso.core)
+            implementation(libs.androidx.compose.ui.test.junit4)
         }
         
         commonMain.dependencies {
@@ -85,7 +88,19 @@ kotlin {
         
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
         }
+
+        val androidInstrumentedTest by getting {
+            dependencies {
+                implementation(libs.androidx.testExt.junit)
+                implementation(libs.androidx.espresso.core)
+                implementation(libs.androidx.compose.ui.test.junit4)
+            }
+        }
+    }
+    sourceSets.androidInstrumentedTest.dependencies {
+        implementation(kotlin("test"))
     }
 }
 
@@ -99,6 +114,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     
     packaging {
@@ -120,9 +136,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
     implementation(libs.google.firebase.auth)
+    implementation(libs.androidx.ui.test.junit4.android)
     debugImplementation(compose.uiTooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
