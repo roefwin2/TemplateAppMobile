@@ -298,7 +298,6 @@ fun ForgotPasswordScreen(
                                     )
                                 )
                                 .padding(20.dp)
-                                .testTag(ForgotPasswordScreenTestTags.SuccessMessage)
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -325,7 +324,8 @@ fun ForgotPasswordScreen(
                                     text = "Email envoyé !",
                                     color = Color(0xFF00C853),
                                     fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.testTag(ForgotPasswordScreenTestTags.SuccessMessage)
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))

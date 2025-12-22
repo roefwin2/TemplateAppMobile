@@ -413,7 +413,7 @@ private fun LoginTextField(
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -454,7 +454,7 @@ private fun LoginTextField(
                 errorBorderColor = LoginTheme.error,
                 cursorColor = LoginTheme.primaryAccent
             ),
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .height(64.dp)
         )

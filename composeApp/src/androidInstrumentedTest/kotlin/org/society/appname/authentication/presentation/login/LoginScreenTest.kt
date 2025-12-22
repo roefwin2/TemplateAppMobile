@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.society.appname.authentication.domain.usecase.AppleSignInUseCase
@@ -13,7 +14,7 @@ import org.society.appname.authentication.domain.usecase.GoogleSignInUseCase
 import org.society.appname.authentication.domain.usecase.LoginUseCase
 import org.society.appname.authentication.domain.usecase.SaveTokenUseCase
 import org.society.appname.testing.FakeAuthRepository
-import kotlin.test.assertTrue
+
 
 class LoginScreenTest {
 
@@ -39,8 +40,9 @@ class LoginScreenTest {
         }
 
         composeTestRule.mainClock.advanceTimeBy(1_000)
-        composeTestRule.onNodeWithTag(LoginScreenTestTags.EmailField).performTextInput("regis@gmail.com")
-        composeTestRule.onNodeWithTag(LoginScreenTestTags.PasswordField).performTextInput("123456")
+        composeTestRule.onNodeWithTag(LoginScreenTestTags.EmailField)
+            .performTextInput("demo@gmail.com")
+        composeTestRule.onNodeWithTag(LoginScreenTestTags.PasswordField).performTextInput("Test1234")
         composeTestRule.onNodeWithTag(LoginScreenTestTags.LoginButton)
             .assertIsDisplayed()
             .performClick()

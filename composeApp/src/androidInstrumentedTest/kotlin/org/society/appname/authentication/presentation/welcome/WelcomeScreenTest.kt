@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import org.junit.Rule
@@ -24,8 +25,6 @@ class WelcomeScreenTest {
 
     @Test
     fun getStartedClickUpdatesUiState() {
-        composeTestRule.mainClock.autoAdvance = false
-
         composeTestRule.setContent {
             var actionStatus by remember { mutableStateOf("idle") }
 
@@ -41,8 +40,11 @@ class WelcomeScreenTest {
             }
         }
 
-        composeTestRule.mainClock.advanceTimeBy(1_000)
-        composeTestRule.waitForIdle()
+        // Attendre que le BottomSheet soit visible
+        composeTestRule.waitUntil(timeoutMillis = 5000) {
+            composeTestRule.onAllNodesWithTag(WelcomeScreenTestTags.BottomSheet)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
 
         composeTestRule.onNodeWithTag(WelcomeScreenTestTags.BottomSheet).assertIsDisplayed()
         composeTestRule.onNodeWithTag(WelcomeScreenTestTags.Title).assertTextEquals("Bienvenue")

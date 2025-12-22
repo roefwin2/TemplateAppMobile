@@ -10,7 +10,7 @@ class FakeAuthRepository : AuthRepository {
     private val authStateFlow = MutableStateFlow<User?>(null)
 
     override suspend fun login(email: String, password: String): AuthResult<User> {
-        return if (email == "regis@gmail.com" && password == "123456") {
+        return if (email == "demo@gmail.com" && password == "Test1234") {
             AuthResult.Success(User(uid = "test-user", email = email))
         } else {
             AuthResult.Error(IllegalArgumentException("Invalid credentials"))

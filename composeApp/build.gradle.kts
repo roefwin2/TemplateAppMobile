@@ -99,6 +99,9 @@ kotlin {
             }
         }
     }
+    sourceSets.androidInstrumentedTest.dependencies {
+        implementation(kotlin("test"))
+    }
 }
 
 android {
