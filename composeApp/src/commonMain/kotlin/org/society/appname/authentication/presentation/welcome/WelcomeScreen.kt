@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -53,6 +54,13 @@ object WelcomeTheme {
     val textSecondary = Color(0xFF6B7280)
     val gradientStart = Color(0xFF6366F1)
     val gradientEnd = Color(0xFFA855F7)
+}
+
+object WelcomeScreenTestTags {
+    const val BottomSheet = "welcome_bottom_sheet"
+    const val Title = "welcome_title"
+    const val GetStartedButton = "welcome_get_started_button"
+    const val LoginButton = "welcome_login_button"
 }
 
 @Composable
@@ -254,7 +262,8 @@ private fun WelcomeBottomSheet(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag(WelcomeScreenTestTags.BottomSheet),
         shape = RoundedCornerShape(32.dp),
         color = Color.White,
         shadowElevation = 20.dp,
@@ -281,7 +290,8 @@ private fun WelcomeBottomSheet(
                 text = "Bienvenue",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = WelcomeTheme.textPrimary
+                color = WelcomeTheme.textPrimary,
+                modifier = Modifier.testTag(WelcomeScreenTestTags.Title)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -302,7 +312,8 @@ private fun WelcomeBottomSheet(
                 onClick = onGetStarted,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(56.dp)
+                    .testTag(WelcomeScreenTestTags.GetStartedButton),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent
@@ -339,7 +350,8 @@ private fun WelcomeBottomSheet(
                 onClick = onLogin,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(56.dp)
+                    .testTag(WelcomeScreenTestTags.LoginButton),
                 shape = RoundedCornerShape(16.dp),
                 border = ButtonDefaults.outlinedButtonBorder.copy(
                     brush = Brush.horizontalGradient(
