@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,6 +48,12 @@ object LoginTheme {
     val gradientEnd = Color(0xFFA855F7)
     val error = Color(0xFFEF4444)
     val divider = Color(0xFFE5E7EB)
+}
+
+object LoginScreenTestTags {
+    const val EmailField = "login_email_field"
+    const val PasswordField = "login_password_field"
+    const val LoginButton = "login_submit_button"
 }
 
 @Composable
@@ -151,6 +158,7 @@ fun LoginScreen(
                         onValueChange = viewModel::onEmailChange,
                         label = "Email",
                         leadingIcon = Icons.Default.Email,
+                        modifier = Modifier.testTag(LoginScreenTestTags.EmailField),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
@@ -168,6 +176,7 @@ fun LoginScreen(
                         onValueChange = viewModel::onPasswordChange,
                         label = "Mot de passe",
                         leadingIcon = Icons.Default.Lock,
+                        modifier = Modifier.testTag(LoginScreenTestTags.PasswordField),
                         isPassword = true,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
@@ -233,7 +242,8 @@ fun LoginScreen(
                         onClick = { viewModel.onLoginClicked() },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp),
+                            .height(56.dp)
+                            .testTag(LoginScreenTestTags.LoginButton),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),

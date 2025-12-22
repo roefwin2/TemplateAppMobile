@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,6 +42,12 @@ import org.koin.compose.viewmodel.koinViewModel
  *
  * Design cohérent avec WelcomeScreen, OnboardingScreen et LoginScreen
  */
+object ForgotPasswordScreenTestTags {
+    const val EmailField = "forgot_password_email_field"
+    const val SendButton = "forgot_password_send_button"
+    const val SuccessMessage = "forgot_password_success_message"
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ForgotPasswordScreen(
@@ -200,7 +207,8 @@ fun ForgotPasswordScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .focusRequester(emailFocusRequester),
+                            .focusRequester(emailFocusRequester)
+                            .testTag(ForgotPasswordScreenTestTags.EmailField),
                         singleLine = true,
                         enabled = !state.isSuccess,
                         isError = state.errorMessage != null,
@@ -290,6 +298,7 @@ fun ForgotPasswordScreen(
                                     )
                                 )
                                 .padding(20.dp)
+                                .testTag(ForgotPasswordScreenTestTags.SuccessMessage)
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -344,7 +353,8 @@ fun ForgotPasswordScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(56.dp),
+                                .height(56.dp)
+                                .testTag(ForgotPasswordScreenTestTags.SendButton),
                             enabled = state.email.isNotBlank() && !state.isLoading,
                             shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(
