@@ -47,6 +47,9 @@ kotlin {
 
             // IMPORTANT: Google Play Services Auth
             implementation("com.google.android.gms:play-services-auth:20.7.0")
+            implementation(libs.androidx.testExt.junit)
+            implementation(libs.androidx.espresso.core)
+            implementation(libs.androidx.compose.ui.test.junit4)
         }
         
         commonMain.dependencies {
@@ -138,6 +141,7 @@ android {
 
 dependencies {
     implementation(libs.google.firebase.auth)
+    implementation(libs.androidx.ui.test.junit4.android)
     debugImplementation(compose.uiTooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
